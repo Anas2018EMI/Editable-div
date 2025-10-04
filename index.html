@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="my.css" />
+    <meta charset="utf-8" />
+  </head>
+
+  <body>
+    <ul>
+      <li>Click the div to edit.</li>
+      <li>Enter or blur saves the result.</li>
+    </ul>
+
+    HTML is allowed.
+
+    <div id="view" class="view">Text</div>
+
+    <script>
+      // ...your code...
+      // Note: <textarea> should have class="edit"
+      // my.css has styles to make it the same size as div
+
+      function switchElement(view) {
+        view.onclick = function (event) {
+          let textarea = document.createElement("textarea");
+          console.log(this.textContent);
+          textarea.classList.add("edit");
+          textarea.value = this.innerHTML;
+          this.replaceWith(textarea);
+          textarea.focus();
+
+          textarea.addEventListener("keydown", function (event) {
+            console.log(event.code);
+            if (event.code == "Enter" || event.code == "NumpadEnter") {
+              textarea.blur();
+            }
+          });
+
+          textarea.addEventListener("blur", function (event) {
+            let div = document.createElement("div");
+            div.classList.add("view");
+            div.id = "view";
+            div.innerHTML = event.currentTarget.value;
+            event.currentTarget.replaceWith(div);
+            switchElement(div);
+          });
+        };
+      }
+      let view = document.getElementById("view");
+      switchElement(view);
+    </script>
+  </body>
+</html>
